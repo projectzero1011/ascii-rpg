@@ -3,43 +3,17 @@
 #include <vector>
 #include <fstream>
 #include <iomanip>
+#include <constants.h>
+#include <Position.h>
 using namespace std;
 
-const int ROWS = 4, COLS = 4;
-const string null_cell = "";
-const string empty_cell = ".";
-const string block_sprite = "█";
-const string item_sprite = "♠";
+//-----------------------------------------------------------------------------
 
-const string player_sprite = "@";
-const string enemy_sprite = "%";
+// Position.h
 
 //-----------------------------------------------------------------------------
 
-struct Position {
-public:
-    Position(int row, int col);
-    int row() const { return r; }
-    int col() const { return c; }
-private:
-    int r;
-    int c;
-};
-
-//-----------------------------------------------------------------------------
-
-bool is_out_of_range(int row, int col) {
-    if (row < 0 || row >= ROWS || col < 0 || col >= COLS) return true;
-    return false;
-}
-
-//-----------------------------------------------------------------------------
-
-Position::Position(int row, int col) 
-    : r{row}, c{col}
-{
-    if (is_out_of_range(row,col)) throw runtime_error("Invalid Position");
-}
+// Position.cpp
 
 //-----------------------------------------------------------------------------
 
