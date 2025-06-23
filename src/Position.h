@@ -1,7 +1,5 @@
 #pragma once
 
-bool is_out_of_range(int row, int col);
-
 class Position {
 public:
     Position(int row, int col);
@@ -11,3 +9,5 @@ private:
     int r;
     int c;
 };
+
+bool is_out_of_range(int row, int col);
