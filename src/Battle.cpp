@@ -12,6 +12,7 @@ void Battle::print(Battle_frame bf) {
     fm.print(bf);
 }
 
+// Work here 6/27 8:36pm
 void Battle::apply_status(Actor& a) {
     if(a.counter() > 0) {
         switch(a.status()) {
