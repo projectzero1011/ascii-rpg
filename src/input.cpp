@@ -58,3 +58,19 @@ Option battle_input(string message) {
         default:  return Option::invalid;
     }
 }
+
+Answer end_input(string message) {
+    cout << message << "\n"
+         << "> ";
+    string input;
+    cin >> input;
+    cin.ignore(numeric_limits<streamsize>::max(),'\n');
+
+    char ch = (input.size() == 1) ? input[0] : ' ';
+
+    switch(ch) {
+        case 'y': case 'Y': return Answer::yes;
+        case 'n': case 'N': return Answer::no;
+        default: return Answer::none; 
+    }
+}

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <limits>
 #include <utils.h>  // Misc.
 #include <input.h>  // 
 #include <prompt.h> // 
@@ -105,16 +104,16 @@ int main() try {
         battle.refresh();
 
         // Used for Spell Menu
-        bool spell_display = false;
-        const string spell_prompt = "What Spell? [z: back]";
-        const string battle_prompt = "What will you do? [h: help]";
+        bool is_spell_shown = false;
+        const string spell_msg = "What Spell? [z: back]";
+        const string battle_msg = "What will you do? [h: help]";
 
         while(enemy.hp() > 0 && player.hp() > 0) {
             player.reset_parry();
             Option choice = Option::invalid;
 
             while(!is_battle_option(choice)) {
-                string msg = (spell_display) ? spell_prompt : battle_prompt;
+                string msg = (is_spell_shown) ? spell_msg : battle_msg;
                 choice = battle_input(msg);
 
                 switch(choice) {
@@ -162,13 +161,13 @@ int main() try {
                         break;
                     case Option::spell:
                         battle.print(Battle_frame::spell_options);
-                        spell_display = true;
+                        is_spell_shown = true;
                         continue;
                     case Option::invalid:
                         battle.refresh_last();
                         break;
                     case Option::back:
-                        spell_display = false;
+                        is_spell_shown = false;
                         battle.refresh();
                         break;
                     default:
@@ -176,7 +175,7 @@ int main() try {
                         break;
                 }
 
-                if (is_battle_option(choice)) spell_display = false;
+                if (is_battle_option(choice)) is_spell_shown = false;
             }
 
             if (enemy.hp() == 0) break;
@@ -220,16 +219,10 @@ int main() try {
         
         if (player.hp() == 0) prompt_next("You lost!");
         if (enemy.hp() == 0) prompt_next("You won!");
-
-        // Answer ans = end_input();
-
-        cout << "\nReturn to title screen? (y/n)\n"
-             << "> ";
-        char answer = ' ';
-        cin >> answer;
-        cin.ignore(numeric_limits<streamsize>::max(),'\n');
-
-        if (answer != 'y') break;
+        
+        cout << "\n";
+        Answer ans = end_input("Return to title screen? (y/n)");
+        if (ans != Answer::yes) break;
 
         clear_screen();
     }

@@ -21,7 +21,7 @@ void Battle::apply_status(Actor& a) {
                 a.decr_hp(3);
                 a.set_counter(a.counter()-1);
                 print(Battle_frame::enemy_burn);
-                prompt_next("Burn DMG Taken!");
+                prompt_next("Burn DMG Taken!", *this);
                 break;
             // case Status::freeze:
             default: 
