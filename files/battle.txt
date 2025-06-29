@@ -4,6 +4,6 @@
 
 ════════ Player ════════
  1 Attack       2 Parry
- 3 Heal         4 Spell
+ 3 Spell        4 ---
 ════════════════════════
 

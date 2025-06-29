@@ -3,10 +3,10 @@
 enum class Option {
     attack = 1,
     parry = 2,
-    heal = 3,
-    spell = 4,
+    spell = 3,
     fire = 7,
     ice = 8,
+    heal = 9,
     help,
     back,
     invalid

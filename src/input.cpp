@@ -48,8 +48,7 @@ Option battle_input(string message) {
     switch(ch) {
         case '1': return Option::attack;
         case '2': return Option::parry;
-        // case '3': return Option::heal;
-        case '4': return Option::spell;
+        case '3': return Option::spell;
         case '7': return Option::fire;
         case '8': return Option::ice;
         case '9': return Option::heal;
