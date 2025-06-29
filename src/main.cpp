@@ -258,18 +258,11 @@ I'll do the following:
 
 
 //
-1) Fix bool Enemy::in_vicinity(); use helper functions left, right, up, down
-
-2) candidates for enum classes 
+1) candidates for enum classes 
 
 enemy lvl
 cells (empty, null)
 sprites (player, enemy, block, and item sprites)
-
-3) Player data members hp and mp, health and mana respectively, and member 
-function getters are hp() and mp() respectively
-
-4) Rework Enemy::attack()
 
 
 //

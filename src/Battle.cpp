@@ -23,6 +23,7 @@ void Battle::apply_status(Actor& a) {
                 print(Battle_frame::enemy_burn);
                 prompt_next("Burn DMG Taken!");
                 break;
+            // case Status::freeze:
             default: 
                 throw runtime_error("Invalid Status!"); 
                 break;
