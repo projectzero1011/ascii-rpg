@@ -272,40 +272,6 @@ function getters are hp() and mp() respectively
 4) Rework Enemy::attack()
 
 
-
-
-//
-Implement Entity class hierarchy 
-
-Good idea for the following reasons:
-- Get to have only one place() and one remove() for class World_map, 
-simplifying the code to make it more readable
-- Fixes the weird cyclical nature of both class Player & Enemy attack() 
-passing an instance of the other
-- Reduces the size of class Player & Enemy with a common base class
-- Practice & Demonstrate OOP Design
-//
-
-
-//
-Organize and roll back to have constructors from classes : Entity to be at the 
-top, after their class definitions. 
-
-- Adjust Position to disallow the creation of an invalid Position to get rid 
-of the outside_range() function in the constructor
-- Get rid of the place() in the constructors
-- Have place() disallow overlapping placing of entities
-
-This will inevitably make it so that place() is no longer inline with it's 
-extra lines for validation before placing entities, but the efficiency of 
-inlining is negligible for this kind of program in hindsight. Even if you do 
-go significantly "slower" by not inlining place(), you're supposed to go slow 
-when moving anyway. You're not supposed to be moving fast paced. On top of 
-that, efficiency takes the back seat to simplicity, readability, and 
-maintainability. Which is what making these changes would do for the program.
-//
-
-
 //
 1) Maybe have last args of Enemy be int level
 2) Maybe reduce size of void Enemy::move(); 
@@ -314,7 +280,7 @@ maintainability. Which is what making these changes would do for the program.
 //
 
 
-// Old comments from main.cpp -> .h and .cpp split
+// Old comments from before main.cpp split
 
 // Selection.h - header to stay consistent with Key.h
 // Key.h header so that Player.h and input.h can access enum class Key
@@ -322,20 +288,6 @@ maintainability. Which is what making these changes would do for the program.
 
 // add get weakness, set weakness, and private member weakness
 // class Enemy : public Actor; // Enemy.h
-
-
-// Implement messages that say "Player dealt [x] DMG!"
-// Make this an Actor method so that enemies can cast fire too
-// void Player::fire(Enemy& enemy, Battle& battle) // Player.cpp
-
-
-// Implement messages that say "Player dealt [x] DMG!"
-// void Player::ice(Enemy& enemy, Battle& battle) // Player.cpp
-
-
-// Needs work (particularly in simplifying the conditionals)
-// Could use if (player_to_left) or (player_to_right), etc
-// void Enemy::move(const Player& player, World_map& world) // Enemy.cpp
 
 
 // WORK HERE 6/27/25 8:41 PM
@@ -350,17 +302,7 @@ maintainability. Which is what making these changes would do for the program.
 // Enemy_option Enemy::input(Player& player, Battle& battle); // Enemy.cpp
 
 
-// getting enemy vicinity cells can be helper functions
-// needs to be reworked
-
-// bool Enemy::in_vicinity(const Player& p, const World_map& world)
-// Enemy.cpp
-
-
-// Could use more work
-// void Enemy::attack(Player& player, Battle& battle) // Enemy.cpp
-
-
 // Inherited Enemy behavior (member functions) for fire enemy, etc.
+// Move spell methods to class Actor so that enemies can cast spells too
 
 */

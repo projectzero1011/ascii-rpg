@@ -64,9 +64,12 @@ void Player::parry() {
 
 // Implement messages that say "Player dealt [x] DMG!"
 // Make this an Actor method so that enemies can cast fire too
+
+constexpr int fire_dmg = 6;
+
 void Player::fire(Enemy& enemy, Battle& battle) {
     decr_mp(1);
-    enemy.decr_hp(6);
+    enemy.decr_hp(fire_dmg);
     
     // Handle burn status
     int roll = rand() % 10;
@@ -77,8 +80,10 @@ void Player::fire(Enemy& enemy, Battle& battle) {
     }
     
     battle.print(Battle_frame::player_fire);
-    prompt_next("Cast fire!",battle);
+    prompt_next("Player dealt " + to_string(fire_dmg) + " DMG!", battle);
 }
+
+constexpr int ice_dmg = 8;
 
 // Implement messages that say "Player dealt [x] DMG!"
 void Player::ice(Enemy& enemy, Battle& battle) {
@@ -87,7 +92,7 @@ void Player::ice(Enemy& enemy, Battle& battle) {
     // chance of freeze
 
     battle.print(Battle_frame::player_ice);
-    prompt_next("Cast ice!",battle);
+    prompt_next("Player dealt " + to_string(ice_dmg) + " DMG!",battle);
 }
 
 void Player::heal(Battle& battle) {

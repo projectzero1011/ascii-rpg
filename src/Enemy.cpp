@@ -5,6 +5,7 @@
 #include <Battle.h>
 #include <prompt.h>
 
+// Could use if (player_to_left) or (player_to_right), etc
 void Enemy::move(const Player& player, World_map& world) {
     int player_row = player.row();
     int player_col = player.col();
