@@ -1,15 +1,9 @@
 #include <input.h>
+#include <utils.h>
 #include <limits>
 
 Selection title_input(string message) {
-    cout << message << "\n"
-         << "> ";
-    string input;
-    cin >> input;
-    cin.ignore(numeric_limits<streamsize>::max(),'\n');
-    
-    char ch = (input.size() == 1) ? input[0] : ' ';
-
+    char ch = get_char(message);
     switch(ch) {
         case 'z': return Selection::start; break;
         case 'h': return Selection::help; break;
@@ -18,14 +12,7 @@ Selection title_input(string message) {
 }
 
 Key world_input(string message) {
-    cout << message << "\n"
-         << "> ";
-    string input;
-    cin >> input;
-    cin.ignore(numeric_limits<streamsize>::max(),'\n');
-    
-    char ch = (input.size() == 1) ? input[0] : ' ';
-
+    char ch = get_char(message);
     switch(ch) {
         case 'w': return Key::up;
         case 'a': return Key::left;
@@ -37,14 +24,7 @@ Key world_input(string message) {
 }
 
 Option battle_input(string message) {
-    cout << message << "\n"
-         << "> ";
-    string input;
-    cin >> input;
-    cin.ignore(numeric_limits<streamsize>::max(),'\n');
-    
-    char ch = (input.size() == 1) ? input[0] : ' ';
-
+    char ch = get_char(message);
     switch(ch) {
         case '1': return Option::attack;
         case '2': return Option::parry;
@@ -60,14 +40,7 @@ Option battle_input(string message) {
 }
 
 Answer end_input(string message) {
-    cout << message << "\n"
-         << "> ";
-    string input;
-    cin >> input;
-    cin.ignore(numeric_limits<streamsize>::max(),'\n');
-
-    char ch = (input.size() == 1) ? input[0] : ' ';
-
+    char ch = get_char(message);
     switch(ch) {
         case 'y': case 'Y': return Answer::yes;
         case 'n': case 'N': return Answer::no;
