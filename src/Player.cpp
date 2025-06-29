@@ -62,16 +62,13 @@ void Player::parry() {
     (roll <= 6) ? parried = true : parried = false;
 }
 
-// Implement messages that say "Player dealt [x] DMG!"
-// Make this an Actor method so that enemies can cast fire too
-
 constexpr int fire_dmg = 6;
 
 void Player::fire(Enemy& enemy, Battle& battle) {
     decr_mp(1);
     enemy.decr_hp(fire_dmg);
     
-    // Handle burn status
+    // Handle burn chance
     int roll = rand() % 10;
     int burn = (roll <= 3) ? true : false;
     if(burn && enemy.status() == Status::none) { 
@@ -85,7 +82,6 @@ void Player::fire(Enemy& enemy, Battle& battle) {
 
 constexpr int ice_dmg = 8;
 
-// Implement messages that say "Player dealt [x] DMG!"
 void Player::ice(Enemy& enemy, Battle& battle) {
     decr_mp(2);
     enemy.decr_hp(8);

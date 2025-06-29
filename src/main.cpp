@@ -258,14 +258,6 @@ I'll do the following:
 
 
 //
-1) candidates for enum classes 
-
-enemy lvl
-cells (empty, null)
-sprites (player, enemy, block, and item sprites)
-
-
-//
 1) Maybe have last args of Enemy be int level
 2) Maybe reduce size of void Enemy::move(); 
 3) Maybe for Enemy AI, move around block horizontally if can't chase vertically
@@ -293,9 +285,5 @@ sprites (player, enemy, block, and item sprites)
 // keep rolling as long as it's invalid choice (not enough mp, etc.)
 // is_valid(choice)
 // Enemy_option Enemy::input(Player& player, Battle& battle); // Enemy.cpp
-
-
-// Inherited Enemy behavior (member functions) for fire enemy, etc.
-// Move spell methods to class Actor so that enemies can cast spells too
 
 */
