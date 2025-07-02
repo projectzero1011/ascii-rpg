@@ -4,7 +4,7 @@
 using namespace std;
 
 void clear_screen() {
-    system("cls");
+    cout << "\033[2J\033[1;1H";
 }
 
 // Get char with input validation
