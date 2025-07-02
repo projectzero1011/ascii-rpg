@@ -11,6 +11,7 @@ Clone the repository (or Download the ZIP via GitHub):
 
 ```bash
 git clone https://github.com/projectzero1011/ascii-rpg.git
+cd ascii-rpg
 ```
 
 Build the project:
