@@ -37,7 +37,7 @@ void Player::attack(Enemy& enemy, Battle& battle) {
     if (enemy.status() == Status::freeze) hit = true;
     bool crit = (roll == 1) ? true : false;
 
-    int dmg = 3 + rand() % 2;
+    int dmg = 3 + rand() % 3;
     if (crit) dmg *= 3;
 
     if(hit) {
@@ -63,11 +63,12 @@ void Player::parry() {
     (roll <= 6) ? parried = true : parried = false;
 }
 
-constexpr int fire_dmg = 6;
+constexpr int fire_dmg = 8;
 
 void Player::fire(Enemy& enemy, Battle& battle) {
     decr_mp(1);
-    enemy.decr_hp(fire_dmg);
+    int dmg = fire_dmg + (rand() % 5);
+    enemy.decr_hp(dmg);
     
     // Handle burn chance
     int roll = rand() % 10;
@@ -78,14 +79,15 @@ void Player::fire(Enemy& enemy, Battle& battle) {
     }
     
     battle.print(Battle_frame::player_fire);
-    prompt_next("Player dealt " + to_string(fire_dmg) + " DMG!", battle);
+    prompt_next("Player dealt " + to_string(dmg) + " DMG!", battle);
 }
 
-constexpr int ice_dmg = 8;
+constexpr int ice_dmg = 11;
 
 void Player::ice(Enemy& enemy, Battle& battle) {
     decr_mp(2);
-    enemy.decr_hp(ice_dmg);
+    int dmg = ice_dmg + (rand() % 5);
+    enemy.decr_hp(dmg);
     
     // Handle freeze chance
     int roll = rand() % 10;
@@ -96,7 +98,7 @@ void Player::ice(Enemy& enemy, Battle& battle) {
     }
 
     battle.print(Battle_frame::player_ice);
-    prompt_next("Player dealt " + to_string(ice_dmg) + " DMG!",battle);
+    prompt_next("Player dealt " + to_string(dmg) + " DMG!",battle);
 }
 
 void Player::heal(Battle& battle) {

@@ -26,10 +26,10 @@ public:
     void set_counter(int c) { count = c; }
 protected:
     Actor(Position p, int hp, int mp) 
-    : Entity{p}, h{hp}, max_h{hp}, max_m{mp} { }
+    : Entity{p}, h{hp}, max_h{hp}, m{mp}, max_m{mp} { }
 private:
     int h, max_h;
-    int m {0}, max_m;
+    int m, max_m;
     Status st {Status::none};
     int count {0};
 };
