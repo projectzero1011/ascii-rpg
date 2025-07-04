@@ -198,9 +198,9 @@ int main() try {
                 case Enemy_option::attack_up:
                     enemy.attack_up(battle);
                     break;
-                case Enemy_option::frozen:
-                    break;
                 */
+                case Enemy_option::none:
+                    break;
                 default:
                     throw runtime_error("Enemy_option doesn't exist!");
                     break;

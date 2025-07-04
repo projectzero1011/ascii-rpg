@@ -39,6 +39,10 @@ vector<Enemy_option> enemy_option_tbl = {
 Enemy_option Enemy::input(Player& player, Battle& battle) {
     int roll = rand() % enemy_option_tbl.size();
     Enemy_option choice = enemy_option_tbl[roll];
+    // Limit freeze to 2 turns
+    if(status() == Status::freeze && counter() > 0) {
+        choice = Enemy_option::none;
+    }
     return choice;
 }
 

@@ -23,7 +23,12 @@ void Battle::apply_status(Actor& a) {
                 print(Battle_frame::enemy_burn);
                 prompt_next("Burn DMG Taken!", *this);
                 break;
-            // case Status::freeze:
+            case Status::freeze:
+                // a.freeze();
+                a.set_counter(a.counter()-1);
+                print(Battle_frame::enemy_freeze);
+                prompt_next("The Enemy is Frozen!");
+                break;
             default: 
                 throw runtime_error("Invalid Status!"); 
                 break;

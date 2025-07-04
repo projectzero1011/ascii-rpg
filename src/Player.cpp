@@ -34,6 +34,7 @@ void Player::move(Key input, World_map& world) {
 void Player::attack(Enemy& enemy, Battle& battle) {
     int roll = rand() % 10;
     bool hit = (roll == 0) ? false : true;
+    if (enemy.status() == Status::freeze) hit = true;
     bool crit = (roll == 1) ? true : false;
 
     int dmg = 3 + rand() % 2;
@@ -70,8 +71,8 @@ void Player::fire(Enemy& enemy, Battle& battle) {
     
     // Handle burn chance
     int roll = rand() % 10;
-    int burn = (roll <= 3) ? true : false;
-    if(burn && enemy.status() == Status::none) { 
+    bool is_burn = (roll < 4) ? true : false;
+    if(is_burn && enemy.status() == Status::none) { 
         enemy.set_status(Status::burn); 
         enemy.set_counter(3); 
     }
@@ -84,8 +85,15 @@ constexpr int ice_dmg = 8;
 
 void Player::ice(Enemy& enemy, Battle& battle) {
     decr_mp(2);
-    enemy.decr_hp(8);
-    // chance of freeze
+    enemy.decr_hp(ice_dmg);
+    
+    // Handle freeze chance
+    int roll = rand() % 10;
+    bool is_freeze = (roll < 4) ? true : false;
+    if(is_freeze && enemy.status() == Status::none) {
+        enemy.set_status(Status::freeze);
+        enemy.set_counter(2);
+    }
 
     battle.print(Battle_frame::player_ice);
     prompt_next("Player dealt " + to_string(ice_dmg) + " DMG!",battle);

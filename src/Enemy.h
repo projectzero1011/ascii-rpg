@@ -11,6 +11,8 @@ class World_map;
 enum class Enemy_option {
     attack,
     // fire
+    // ice
+    none
 };
 
 // add get weakness, set weakness, and private member weakness

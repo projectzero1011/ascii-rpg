@@ -10,6 +10,12 @@ enum class Frame {
     help_battle
 };
 
+const vector<string> frame_tbl = { 
+    "title", 
+    "help_world", 
+    "help_battle" 
+};
+
 enum class Battle_frame {
     battle,
     player_attack,
@@ -19,13 +25,8 @@ enum class Battle_frame {
     player_fire,
     player_ice,
     enemy_attack,
-    enemy_burn
-};
-
-const vector<string> frame_tbl = { 
-    "title", 
-    "help_world", 
-    "help_battle" 
+    enemy_burn,
+    enemy_freeze
 };
 
 const vector<string> battle_frame_tbl = { 
@@ -37,5 +38,6 @@ const vector<string> battle_frame_tbl = {
     "player_fire", 
     "player_ice", 
     "enemy_attack", 
-    "enemy_burn" 
+    "enemy_burn",
+    "enemy_freeze"
 };
