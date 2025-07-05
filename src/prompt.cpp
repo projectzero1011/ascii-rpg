@@ -5,10 +5,7 @@
 #include <utils.h>
 
 void prompt_next(string message) {
-    cout << message + " [z: next]" << "\n"
-         << "> ";
-    string s;
-    cin >> s;
+    char ch = get_char(message + " [z: next]");
 }
 
 void prompt_next(string message, const World_map& world) {
