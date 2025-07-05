@@ -23,7 +23,7 @@ int main() try {
     World_map world;
     
     Player player {Position{2,2},40,5};
-    Enemy enemy {Position{0,0},60,3};
+    Enemy enemy {Position{0,0},99,3};
     Item fire_crystal {Position{1,0}};
     Block block {Position{1,1}};
 

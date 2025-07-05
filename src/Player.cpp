@@ -82,7 +82,7 @@ void Player::fire(Enemy& enemy, Battle& battle) {
     prompt_next("Player dealt " + to_string(dmg) + " DMG!", battle);
 }
 
-constexpr int ice_dmg = 11;
+constexpr int ice_dmg = 10;
 
 void Player::ice(Enemy& enemy, Battle& battle) {
     decr_mp(2);
