@@ -1,6 +1,7 @@
 #include <Battle.h>
 #include <iomanip>
 #include <prompt.h>
+#include <input.h>
 
 void Battle::print(Battle_frame bf) {
     last = bf;
@@ -38,5 +39,108 @@ void Battle::apply_status(Actor& a) {
     }
     else {
         a.set_status(Status::none);
+    }
+}
+
+State Battle::handle_spell() {
+    State state = State::spell;
+    while(state == State::spell) {
+        print(Battle_frame::spell_options);
+        Spell choice = spell_input("What Spell? [x: back]");
+
+        switch(choice) {
+            case Spell::fire:
+                state = p.fire(*this);
+                break;
+            case Spell::ice:
+                state = p.ice(*this);
+                break;
+            case Spell::heal:
+                state = p.heal(*this);
+                break;
+            /*
+            case Spell::aegis:
+                state = State::action;
+                player.aegis();
+                break;
+            */
+            case Spell::back:
+                state = State::option;
+                refresh();
+                break;
+            case Spell::invalid:
+                refresh();
+                break;
+            default:
+                throw runtime_error("Invalid Spell!");
+                break;
+        }
+    }
+    return state;
+}
+
+void Battle::player_turn() {
+    State state = State::option;
+    while(state == State::option) {
+        Option choice = battle_input("What will you do? [h: help]");
+
+        switch(choice) {
+            case Option::attack:
+                state = State::action;
+                p.attack(*this);
+                break;
+            case Option::parry:
+                state = State::action;
+                p.parry();
+                break;
+            case Option::spell:
+                state = handle_spell();
+                break;
+            /*
+            case Option::item:
+                // 
+                break;
+            */
+            case Option::help:
+                show_help_battle(fm);
+                refresh();
+                break;
+            case Option::back:
+                state = State::option;
+                refresh();
+                break;
+            case Option::invalid:
+                refresh_last();
+                break;
+            default:
+                throw runtime_error("Invalid Option!");
+                break;
+        }
+    }
+}
+
+void Battle::enemy_turn() {
+    Enemy_option enemy_choice = e.input();
+
+    switch(enemy_choice) {
+        case Enemy_option::attack:
+            e.attack(*this);
+            break;
+        /*
+        case Enemy_option::fire:
+            enemy.fire(player,battle);
+            break;
+        case Enemy_option::ice:
+            enemy.ice(player,battle);
+            break;
+        case Enemy_option::attack_up:
+            enemy.attack_up(battle);
+            break;
+        */
+        case Enemy_option::none:
+            break;
+        default:
+            throw runtime_error("Enemy_option doesn't exist!");
+            break;
     }
 }

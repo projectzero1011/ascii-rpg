@@ -2,8 +2,8 @@
 #include <utils.h>
 #include <limits>
 
-Selection title_input(string message) {
-    char ch = get_char(message);
+Selection title_input(string msg) {
+    char ch = get_char(msg);
     switch(ch) {
         case 'z': return Selection::start; break;
         case 'h': return Selection::help; break;
@@ -11,8 +11,8 @@ Selection title_input(string message) {
     }
 }
 
-Key world_input(string message) {
-    char ch = get_char(message);
+Key world_input(string msg) {
+    char ch = get_char(msg);
     switch(ch) {
         case 'w': return Key::up;
         case 'a': return Key::left;
@@ -23,8 +23,8 @@ Key world_input(string message) {
     }
 }
 
-Option battle_input(string message) {
-    char ch = get_char(message);
+Option battle_input(string msg) {
+    char ch = get_char(msg);
     switch(ch) {
         case '1': return Option::attack;
         case '2': return Option::parry;
@@ -36,8 +36,20 @@ Option battle_input(string message) {
     }
 }
 
-Answer end_input(string message) {
+Spell spell_input(string message) {
     char ch = get_char(message);
+    switch(ch) {
+        case '7': return Spell::fire;
+        case '8': return Spell::ice;
+        case '9': return Spell::heal;
+        // case '0': return Spell::aegis;
+        case 'x': return Spell::back;
+        default:  return Spell::invalid;
+    }
+}
+
+Answer end_input(string msg) {
+    char ch = get_char(msg);
     switch(ch) {
         case 'y': case 'Y': return Answer::yes;
         case 'n': case 'N': return Answer::no;
