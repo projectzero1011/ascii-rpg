@@ -29,12 +29,9 @@ Option battle_input(string message) {
         case '1': return Option::attack;
         case '2': return Option::parry;
         case '3': return Option::spell;
-        case '7': return Option::fire;
-        case '8': return Option::ice;
-        case '9': return Option::heal;
-        // case '0': return Option::aegis
+        // case '4': 
         case 'h': return Option::help;
-        case 'z': return Option::back;
+        case 'x': return Option::back;
         default:  return Option::invalid;
     }
 }

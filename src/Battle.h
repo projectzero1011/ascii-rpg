@@ -7,16 +7,29 @@
 
 class Frame_manager;
 
+enum class State {
+    option,
+    spell,
+    action
+};
+
 class Battle {
 public:
     Battle(Player& pp, Enemy& ee, Frame_manager& fmm) 
     : p{pp}, e{ee}, fm{fmm}, last{Battle_frame::battle} { }
+
+    Player& player() { return p; }
+    Enemy& enemy() { return e; }
 
     void print(Battle_frame bf);
     void refresh() { clear_screen(); print(Battle_frame::battle); }
     void print_last() { print(last); }
     void refresh_last() { clear_screen(); print_last(); }
     void apply_status(Actor& a);
+
+    State handle_spell();
+    void player_turn();
+    void enemy_turn();
 private:
     Player& p;
     Enemy& e;

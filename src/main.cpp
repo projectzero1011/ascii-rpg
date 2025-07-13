@@ -13,6 +13,140 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 
+enum class Spell {
+    fire = 7,
+    ice = 8,
+    heal = 9,
+    // aegis = 0, 
+    invalid,
+    back
+};
+
+//-----------------------------------------------------------------------------
+
+Spell spell_input(string message) {
+    char ch = get_char(message);
+    switch(ch) {
+        case '7': return Spell::fire;
+        case '8': return Spell::ice;
+        case '9': return Spell::heal;
+        // case '0': return Spell::aegis;
+        case 'x': return Spell::back;
+        default:  return Spell::invalid;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+State Battle::handle_spell() {
+    State state = State::spell;
+    while(state == State::spell) {
+        print(Battle_frame::spell_options);
+        Spell choice = spell_input("What Spell? [x: back]");
+
+        switch(choice) {
+            case Spell::fire:
+                state = p.fire(*this);
+                break;
+            case Spell::ice:
+                state = p.ice(*this);
+                break;
+            case Spell::heal:
+                state = p.heal(*this);
+                break;
+            /*
+            case Spell::aegis:
+                state = State::action;
+                player.aegis();
+                break;
+            */
+            case Spell::back:
+                state = State::option;
+                refresh();
+                break;
+            case Spell::invalid:
+                refresh();
+                break;
+            default:
+                throw runtime_error("Invalid Spell!");
+                break;
+        }
+    }
+    return state;
+}
+
+//-----------------------------------------------------------------------------
+
+void Battle::player_turn() {
+    State state = State::option;
+    while(state == State::option) {
+        Option choice = battle_input("What will you do? [h: help]");
+
+        switch(choice) {
+            case Option::attack:
+                state = State::action;
+                p.attack(*this);
+                break;
+            case Option::parry:
+                state = State::action;
+                p.parry();
+                break;
+            case Option::spell:
+                state = handle_spell();
+                break;
+            /*
+            case Option::item:
+                // 
+                break;
+            */
+            case Option::help:
+                show_help_battle(fm);
+                refresh();
+                break;
+            case Option::back:
+                state = State::option;
+                refresh();
+                break;
+            case Option::invalid:
+                refresh_last();
+                break;
+            default:
+                throw runtime_error("Invalid Option!");
+                break;
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Battle::enemy_turn() {
+    Enemy_option enemy_choice = e.input();
+
+    switch(enemy_choice) {
+        case Enemy_option::attack:
+            e.attack(*this);
+            break;
+        /*
+        case Enemy_option::fire:
+            enemy.fire(player,battle);
+            break;
+        case Enemy_option::ice:
+            enemy.ice(player,battle);
+            break;
+        case Enemy_option::attack_up:
+            enemy.attack_up(battle);
+            break;
+        */
+        case Enemy_option::none:
+            break;
+        default:
+            throw runtime_error("Enemy_option doesn't exist!");
+            break;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
 int main() try {
     system("chcp 65001");
     clear_screen();
@@ -51,7 +185,9 @@ int main() try {
                     break;
                 case Selection::invalid: 
                     break;
-                default: throw runtime_error("Selection doesn't exist!");
+                default: 
+                    throw runtime_error("Selection doesn't exist!");
+                    break;
             }
 
             clear_screen();
@@ -71,15 +207,15 @@ int main() try {
                 input = world_input("Use [w,a,s,d] to move [h: help]");
 
                 switch(input) {
-                    case Key::up: case Key::left: case Key::down: 
-                    case Key::right:
+                    case Key::up: case Key::left: 
+                    case Key::down: case Key::right:
                         player.move(input,world);
                         world.refresh();
                         break;
                     case Key::help:
                         show_help_world(fm);
                         break;
-                    //case Key::quit:
+                    // case Key::quit:
                     case Key::invalid:
                         break;
                     default:
@@ -88,6 +224,18 @@ int main() try {
             }
 
             // item is still true here if picked up item
+
+            // *** Make struct Adjacent /w 4 Position objects adj to Player
+            // Have to do this to prevent making null Enemy or null Position
+            // Also to prevent throw runtime_error for nothing adj
+            // Adjacent adj = player.adjacent();
+            // bool is_enemy = world.is_enemy(adj);
+            /*
+            if(is_enemy) {
+                Enemy encounter = world.get_enemy(adj);
+                battle(player,encounter);
+            }
+            */
 
             enemy.move(player,world);
             world.refresh();
@@ -98,114 +246,16 @@ int main() try {
 
         /* Battle */
 
-        /* Player Turn */
-
         Battle battle {player,enemy,fm};
         battle.refresh();
 
-        // Used for Spell Menu
-        bool is_spell_shown = false;
-        const string spell_msg = "What Spell? [z: back]";
-        const string battle_msg = "What will you do? [h: help]";
-
         while(enemy.hp() > 0 && player.hp() > 0) {
             player.reset_parry();
-            Option choice = Option::invalid;
 
-            while(!is_battle_option(choice)) {
-                string msg = (is_spell_shown) ? spell_msg : battle_msg;
-                choice = battle_input(msg);
-
-                switch(choice) {
-                    case Option::attack:
-                        player.attack(enemy,battle);
-                        break;
-                    case Option::parry:
-                        player.parry();
-                        break;
-                    case Option::heal:
-                        if(player.mp() < 2) { 
-                            choice = Option::invalid;
-                            prompt_next("Heal requires 2 MP!",battle);
-                        }
-                        if(choice != Option::invalid) {
-                            player.heal(battle);
-                        }
-                        break;
-                    case Option::fire:
-                        if(player.mp() < 1) { 
-                            choice = Option::invalid;
-                            prompt_next("Fire requires 1 MP!",battle);
-                        }
-                        if(choice != Option::invalid) {
-                            player.fire(enemy,battle);
-                        }
-                        break;
-                    case Option::ice:
-                        if(player.mp() < 2) { 
-                            choice = Option::invalid;
-                            prompt_next("Ice requires 2 MP!",battle);
-                        }
-                        if(choice != Option::invalid) {
-                            player.ice(enemy,battle);
-                        }
-                        break;
-                    /*
-                    case Option::aegis:
-                        // cast aegis
-                        break;
-                    */
-                    case Option::help:
-                        show_help_battle(fm);
-                        battle.refresh();
-                        break;
-                    case Option::spell:
-                        battle.print(Battle_frame::spell_options);
-                        is_spell_shown = true;
-                        continue;
-                    case Option::invalid:
-                        battle.refresh_last();
-                        break;
-                    case Option::back:
-                        is_spell_shown = false;
-                        battle.refresh();
-                        break;
-                    default:
-                        throw runtime_error("Option doesn't exist!");
-                        break;
-                }
-
-                if (is_battle_option(choice)) is_spell_shown = false;
-            }
-
+            battle.player_turn();      
             if (enemy.hp() == 0) break;
 
-            /* Enemy Turn */
-
-            Enemy_option enemy_choice = enemy.input(player,battle);
-
-            switch(enemy_choice) {
-                case Enemy_option::attack:
-                    enemy.attack(player,battle);
-                    break;
-                /*
-                case Enemy_option::fire:
-                    enemy.fire(player,battle);
-                    break;
-                case Enemy_option::ice:
-                    enemy.ice(player,battle);
-                    break;
-                case Enemy_option::attack_up:
-                    enemy.attack_up(battle);
-                    break;
-                */
-                case Enemy_option::none:
-                    break;
-                default:
-                    throw runtime_error("Enemy_option doesn't exist!");
-                    break;
-            }
-
+            battle.enemy_turn();
             if (player.hp() == 0) break;
 
             // Not essential to class Battle, can be regular function

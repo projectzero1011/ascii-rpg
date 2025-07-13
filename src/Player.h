@@ -6,6 +6,7 @@
 class Enemy;
 class Battle;
 class World_map;
+enum class State;
 
 class Player : public Actor {
 public:
@@ -13,12 +14,12 @@ public:
     string sprite() const override { return "@"; }
 
     void move(Key input, World_map& world);
-    void attack(Enemy&, Battle&);
+    void attack(Battle&);
     void parry();
-    void fire(Enemy&, Battle&);
-    void ice(Enemy&, Battle&);
+    State fire(Battle&);
+    State ice(Battle&);
     // cast aegis
-    void heal(Battle&);
+    State heal(Battle&);
 
     bool has_item() const { return item; }
     void set_has_item(bool b) { item = b; }

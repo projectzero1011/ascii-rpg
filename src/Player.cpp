@@ -31,7 +31,9 @@ void Player::move(Key input, World_map& world) {
     }
 }
 
-void Player::attack(Enemy& enemy, Battle& battle) {
+void Player::attack(Battle& battle) {
+    Enemy& enemy = battle.enemy();
+
     int roll = rand() % 10;
     bool hit = (roll == 0) ? false : true;
     if (enemy.status() == Status::freeze) hit = true;
@@ -65,8 +67,15 @@ void Player::parry() {
 
 constexpr int fire_dmg = 8;
 
-void Player::fire(Enemy& enemy, Battle& battle) {
+State Player::fire(Battle& battle) {
+    if(mp() < 1) { 
+        prompt_next("Fire requires 1 MP!", battle); 
+        return State::spell; 
+    }
+    Enemy& enemy = battle.enemy();
     decr_mp(1);
+
+    // Damage calc
     int dmg = fire_dmg + (rand() % 5);
     enemy.decr_hp(dmg);
     
@@ -80,12 +89,20 @@ void Player::fire(Enemy& enemy, Battle& battle) {
     
     battle.print(Battle_frame::player_fire);
     prompt_next("Player dealt " + to_string(dmg) + " DMG!", battle);
+    return State::action;
 }
 
 constexpr int ice_dmg = 10;
 
-void Player::ice(Enemy& enemy, Battle& battle) {
+State Player::ice(Battle& battle) {
+    if(mp() < 2) { 
+        prompt_next("Ice requires 2 MP!", battle); 
+        return State::spell; 
+    }
+    Enemy& enemy = battle.enemy();
     decr_mp(2);
+
+    // Damage calc
     int dmg = ice_dmg + (rand() % 5);
     enemy.decr_hp(dmg);
     
@@ -99,12 +116,22 @@ void Player::ice(Enemy& enemy, Battle& battle) {
 
     battle.print(Battle_frame::player_ice);
     prompt_next("Player dealt " + to_string(dmg) + " DMG!",battle);
+    return State::action;
 }
 
-void Player::heal(Battle& battle) {
+State Player::heal(Battle& battle) {
+    if(mp() < 2) { 
+        prompt_next("Heal requires 2 MP!", battle); 
+        return State::spell; 
+    }
+    decr_mp(2);
+
+    // Heal calc
     int amt = max_hp()*(2.0/3.0);
     incr_hp(amt);
-    decr_mp(2);
+
+    // Animation
     battle.refresh();
     prompt_next("Player healed " + to_string(amt) + " HP!",battle);
+    return State::action;
 }
