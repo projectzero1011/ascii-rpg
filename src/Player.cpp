@@ -18,7 +18,7 @@ void Player::move(Key input, World_map& world) {
     string new_cell = world.look(new_row,new_col);
 
     if(new_cell == item_sprite || new_cell == empty_cell) {
-        world.erase(Position{new_row,new_col});
+        world.reset(Position{new_row,new_col});
         world.remove(*this);
         pos = Position{new_row,new_col};
         world.place(*this);
