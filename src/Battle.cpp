@@ -15,21 +15,20 @@ void Battle::print(Battle_frame bf) {
 
 constexpr int burn = 3;
 
-// Work here 6/27 8:36pm
-void Battle::apply_status(Actor& a) {
+void status_effect(Actor& a, Battle& b) {
     if(a.counter() > 0) {
         switch(a.status()) {
             case Status::burn:
                 // a.burn();
                 a.decr_hp(burn);
                 a.set_counter(a.counter()-1);
-                print(Battle_frame::enemy_burn);
-                prompt_next("Burn dealt " + to_string(burn) + " DMG", *this);
+                b.print(Battle_frame::enemy_burn);
+                prompt_next("Burn dealt " + to_string(burn) + " DMG", b);
                 break;
             case Status::freeze:
                 // a.freeze();
                 a.set_counter(a.counter()-1);
-                print(Battle_frame::enemy_freeze);
+                b.print(Battle_frame::enemy_freeze);
                 prompt_next("The Enemy is Frozen!");
                 break;
             default: 
@@ -40,6 +39,12 @@ void Battle::apply_status(Actor& a) {
     else {
         a.set_status(Status::none);
     }
+}
+
+// Work here 6/27 8:36pm
+void Battle::apply_status() {
+    status_effect(p,*this);
+    status_effect(e,*this);
 }
 
 State Battle::handle_spell() {
@@ -144,3 +149,5 @@ void Battle::enemy_turn() {
             break;
     }
 }
+
+// void engage()

@@ -17,17 +17,10 @@ void Player::move(Key input, World_map& world) {
 
     string new_cell = world.look(new_row,new_col);
 
-    if(new_cell == item_sprite || new_cell == empty_cell) {
-        world.reset(Position{new_row,new_col});
+    if(new_cell == empty_cell) {
         world.remove(*this);
         pos = Position{new_row,new_col};
         world.place(*this);
-    }
-
-    if(new_cell == item_sprite) {
-        set_has_item(true);
-        world.refresh();
-        prompt_next("Item Get!",world);
     }
 }
 

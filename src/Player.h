@@ -21,12 +21,9 @@ public:
     // cast aegis
     State heal(Battle&);
 
-    bool has_item() const { return item; }
-    void set_has_item(bool b) { item = b; }
     bool is_parry() const { return parrying; }
     bool parry_success() const { return parried; }
     void reset_parry() { parrying = false; parried = false; }
 private:
     bool parrying {false}, parried {false};
-    bool item {false};
 };

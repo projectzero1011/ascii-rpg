@@ -4,18 +4,18 @@
 #include <Entity.h>
 #include <vector>
 #include <Player.h>
+#include <Enemy.h>
 
 class World_map {
 public:
-    World_map(initializer_list<reference_wrapper<Entity>> list);
+    World_map(const Player& p, const vector<Enemy>& enemy_v);
     void print() const;
     void refresh() const;
     string look(int row, int col) const;
     void place(const Entity&);
     void remove(Entity& e) { grid[e.row()][e.col()] = empty_cell; }
-    void reset(Position pos) { grid[pos.row()][pos.col()] = empty_cell; }
     void erase(Entity&);
-    vector<reference_wrapper<Entity>> adj_enemies(const Player&);
+    vector<reference_wrapper<Enemy>> adj_enemies(const Player&);
 private:
     string grid[ROWS][COLS]
     {
@@ -24,7 +24,5 @@ private:
         {".", ".", ".", "."},
         {".", ".", ".", "."}
     };
-    vector<reference_wrapper<Entity>> entities;
+    vector<Enemy> enemies;
 };
-
-// reset() is only used for checking the item in World_map

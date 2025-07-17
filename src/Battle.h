@@ -25,11 +25,12 @@ public:
     void refresh() { clear_screen(); print(Battle_frame::battle); }
     void print_last() { print(last); }
     void refresh_last() { clear_screen(); print_last(); }
-    void apply_status(Actor& a);
+    void apply_status();
 
     State handle_spell();
     void player_turn();
     void enemy_turn();
+    // void engage();
 private:
     Player& p;
     Enemy& e;

@@ -4,15 +4,9 @@
 #include <Key.h>
 #include <Option.h>
 #include <Spell.h>
+#include <Answer.h>
 #include <iostream>
 using namespace std;
-
-// Only input.cpp uses it, so no .h file
-enum class Answer {
-    yes,
-    no,
-    none
-};
 
 Selection title_input(string msg);
 Key world_input(string msg);

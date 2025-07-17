@@ -11,3 +11,7 @@ Position::Position(int row, int col)
 {
     if (is_out_of_range(row,col)) throw runtime_error("Invalid Position");
 }
+
+bool Position::operator==(const Position& pos) const {
+    return (r == pos.row()) && (c == pos.col());
+}

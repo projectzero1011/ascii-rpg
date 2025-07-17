@@ -8,6 +8,7 @@ class Entity {
 public:
     Entity(Position p) : pos{p} { }
 
+    Position position() const { return pos; }
     int row() const { return pos.row(); }
     int col() const { return pos.col(); }
 

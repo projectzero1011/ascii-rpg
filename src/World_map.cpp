@@ -1,11 +1,14 @@
 #include <World_map.h>
 #include <utils.h>
+#include <Player.h>
+#include <Enemy.h>
 
-World_map::World_map(initializer_list<reference_wrapper<Entity>> list) 
+World_map::World_map(const Player& p, const vector<Enemy>& enemy_v)
+: enemies{enemy_v}
 {
-    entities.insert(entities.end(), list.begin(), list.end());
-    for(Entity& entity : entities) {
-        place(entity);
+    place(p);
+    for(const Enemy& enemy : enemies) {
+        place(enemy);
     }
 }
 
@@ -44,11 +47,10 @@ void World_map::place(const Entity& e) {
     grid[e.row()][e.col()] = e.sprite();
 }
 
-// Assumes there are no duplicate references in entities vector
 void World_map::erase(Entity& e) {
-    for(int i = 0; i < entities.size(); ++i) {
-        if(&entities[i].get() == &e) {
-            entities.erase(entities.begin() + i);
+    for(int i = 0; i < enemies.size(); ++i) {
+        if(&enemies[i] == &e) {
+            enemies.erase(enemies.begin() + i);
             return;
         }
     }
@@ -71,16 +73,14 @@ vector<Position> adjacent(const Player& player) {
 }
 
 // Check if Entity is an Enemy by using Entity::sprite()
-vector<reference_wrapper<Entity>> World_map::adj_enemies(const Player& player) {
-    vector<reference_wrapper<Entity>> adj_enemies;
+vector<reference_wrapper<Enemy>> World_map::adj_enemies(const Player& player) {
+    vector<reference_wrapper<Enemy>> adj_enemies;
     vector<Position> adj = adjacent(player);
 
     for(const Position& pos : adj) {
-        for(Entity& entity : entities) {
-            bool is_enemy = entity.sprite() == enemy_sprite;
-            bool adj = pos.row() == entity.row() && pos.col() == entity.col();
-            if(is_enemy && adj) {
-                adj_enemies.push_back(entity);
+        for(Enemy& enemy : enemies) {
+            if(pos == enemy.position()) {
+                adj_enemies.push_back(enemy);
             }
         }
     }

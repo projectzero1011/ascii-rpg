@@ -2,10 +2,9 @@
 #include <utils.h>  // Misc.
 #include <input.h>  // 
 #include <prompt.h> // 
-#include <Item.h>
-#include <Block.h>
 #include <Player.h>
 #include <Enemy.h>
+#include <Block.h>
 #include <World_map.h>
 #include <Frame_manager.h>
 #include <Battle.h>
@@ -19,18 +18,12 @@ int main() try {
     
     // generate random seed
     srand(time(nullptr));
-
-    World_map world;
     
     Player player {Position{2,2},40,5};
     Enemy enemy {Position{0,0},99,3};
-    Item fire_crystal {Position{1,0}};
     Block block {Position{1,1}};
 
-    world.place(player);
-    world.place(enemy);
-    world.place(fire_crystal);
-    world.place(block);
+    World_map world {player,{enemy}};
 
     Frame_manager fm;
 
@@ -65,6 +58,8 @@ int main() try {
 
         world.refresh();
 
+        // Make this into main game loop
+        // If merged into loop -> don't need this vicinity while loop
         while(!enemy.in_vicinity(player,world)) {
             Key input = Key::invalid;
 
@@ -89,22 +84,23 @@ int main() try {
                 }
             }
 
-            // item is still true here if picked up item
-
-            // *** Make struct Adjacent /w 4 Position objects adj to Player
-            // Have to do this to prevent making null Enemy or null Position
-            // Also to prevent throw runtime_error for nothing adj
-            // Adjacent adj = player.adjacent();
-            // bool is_enemy = world.is_enemy(adj);
-            /*
-            if(is_enemy) {
-                Enemy encounter = world.get_enemy(adj);
-                battle(player,encounter);
-            }
-            */
-
             enemy.move(player,world);
             world.refresh();
+
+            vector<reference_wrapper<Enemy>> enemies;
+            enemies = world.adj_enemies(player);
+            
+            for(Enemy& enemy : enemies) {
+                // Battle battle {player,enemy,fm};
+                // battle.engage();
+                // if (player.hp() == 0) break;
+                // world.erase(enemy);
+            }
+
+            // if (player.hp() == 0) break;
+
+            // cutscence
+            // boss battle
         }
 
         prompt_next("Enemy engaged!",world);
@@ -115,18 +111,16 @@ int main() try {
         Battle battle {player,enemy,fm};
         battle.refresh();
 
-        while(enemy.hp() > 0 && player.hp() > 0) {
+        while(true) {
             player.reset_parry();
 
-            battle.player_turn();      
+            battle.player_turn();
             if (enemy.hp() == 0) break;
 
             battle.enemy_turn();
             if (player.hp() == 0) break;
 
-            // Not essential to class Battle, can be regular function
-            battle.apply_status(player);
-            battle.apply_status(enemy);
+            battle.apply_status();
 
             battle.refresh();
         }
@@ -175,10 +169,6 @@ I'll do the following:
 
 
 // Old comments from before main.cpp split
-
-// Selection.h - header to stay consistent with Key.h
-// Key.h header so that Player.h and input.h can access enum class Key
-
 
 // add get weakness, set weakness, and private member weakness
 // class Enemy : public Actor; // Enemy.h
