@@ -2,6 +2,7 @@
 #include <utils.h>
 #include <Player.h>
 #include <Enemy.h>
+#include <prompt.h>
 
 World_map::World_map(const Player& p, const vector<Enemy>& enemy_v)
 : enemies{enemy_v}
@@ -51,11 +52,13 @@ void World_map::erase(Entity& e) {
     for(int i = 0; i < enemies.size(); ++i) {
         if(&enemies[i] == &e) {
             enemies.erase(enemies.begin() + i);
+            remove(enemies[i]);
             return;
         }
     }
 }
 
+// class World_map helper function
 vector<Position> adjacent(const Player& player) {
     vector<Position> adj;
 

@@ -26,3 +26,5 @@ private:
     };
     vector<Enemy> enemies;
 };
+
+vector<Position> adjacent(const Player& player);
