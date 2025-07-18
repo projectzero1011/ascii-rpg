@@ -21,7 +21,6 @@ int main() try {
     
     Player player {Position{2,2},40,5};
     Enemy enemy {Position{0,0},99,3};
-    Block block {Position{1,1}};
 
     World_map world {player,{enemy}};
 
@@ -54,13 +53,11 @@ int main() try {
         }
 
 
-        /* World */
+        /* Main Game Loop */
 
         world.refresh();
 
-        // Make this into main game loop
-        // If merged into loop -> don't need this vicinity while loop
-        while(!enemy.in_vicinity(player,world)) {
+        while(true) {
             Key input = Key::invalid;
 
             while(input == Key::invalid) {
@@ -84,51 +81,27 @@ int main() try {
                 }
             }
 
-            enemy.move(player,world);
             world.refresh();
 
             vector<reference_wrapper<Enemy>> enemies;
             enemies = world.adj_enemies(player);
             
             for(Enemy& enemy : enemies) {
-                // Battle battle {player,enemy,fm};
-                // battle.engage();
-                // if (player.hp() == 0) break;
-                // world.erase(enemy);
+                prompt_next("Enemy engaged!",world);
+                Battle battle {player,enemy,fm};
+                battle.engage(world);
+                if (player.hp() == 0) break;
+                world.erase(enemy);
             }
 
-            // if (player.hp() == 0) break;
+            if (player.hp() == 0) break;
 
             // cutscence
             // boss battle
         }
 
-        prompt_next("Enemy engaged!",world);
-        
-
-        /* Battle */
-
-        Battle battle {player,enemy,fm};
-        battle.refresh();
-
-        while(true) {
-            player.reset_parry();
-
-            battle.player_turn();
-            if (enemy.hp() == 0) break;
-
-            battle.enemy_turn();
-            if (player.hp() == 0) break;
-
-            battle.apply_status();
-
-            battle.refresh();
-        }
-
         clear_screen();
-        
         if (player.hp() == 0) prompt_next("You lost!");
-        if (enemy.hp() == 0) prompt_next("You won!");
         
         cout << "\n";
         Answer ans = end_input("Return to title screen? (y/n)");

@@ -30,7 +30,7 @@ public:
     State handle_spell();
     void player_turn();
     void enemy_turn();
-    // void engage();
+    void engage(const World_map& world);
 private:
     Player& p;
     Enemy& e;

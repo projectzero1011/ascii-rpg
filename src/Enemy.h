@@ -21,9 +21,6 @@ public:
     Enemy(Position pos, int hp, int mp) : Actor::Actor(pos,hp,mp) { }
     string sprite() const override { return "%"; }
 
-    void move(const Player& player, World_map& world);
     virtual Enemy_option input();
     void attack(Battle&);
-
-    bool in_vicinity(const Player&, const World_map&);
 };

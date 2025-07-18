@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <prompt.h>
 #include <input.h>
+#include <World_map.h>
 
 void Battle::print(Battle_frame bf) {
     last = bf;
@@ -150,4 +151,25 @@ void Battle::enemy_turn() {
     }
 }
 
-// void engage()
+void Battle::engage(const World_map& world) {
+    refresh();
+
+    while(true) {
+        p.reset_parry();
+
+        player_turn();
+        if(e.hp() == 0) {
+            world.refresh();
+            prompt_next("You won!");
+            return;
+        }
+
+        enemy_turn();
+        if(p.hp() == 0) {
+            return;
+        }
+
+        apply_status();
+        refresh();
+    }
+}

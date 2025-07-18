@@ -5,28 +5,6 @@
 #include <Battle.h>
 #include <prompt.h>
 
-// Could use if (player_to_left) or (player_to_right), etc
-void Enemy::move(const Player& player, World_map& world) {
-    int player_row = player.row();
-    int player_col = player.col();
-    int new_row = row();
-    int new_col = col();
-
-    if (player_row == new_row && player_col < new_col) --new_col;
-    else if (player_row == new_row && player_col > new_col) ++new_col;
-
-    if (player_row < new_row) --new_row;
-    else if (player_row > new_row) ++new_row;
-
-    string new_cell = world.look(new_row,new_col);
-
-    if(new_cell == empty_cell) {
-        world.remove(*this);
-        pos = Position{new_row,new_col};
-        world.place(*this);
-    }
-}
-
 // WORK HERE 3/1/25 5:47 PM
 // if status is Power_slash, then choice is attack
 // keep rolling as long as it's invalid choice (not enough mp, etc.)
@@ -37,9 +15,13 @@ vector<Enemy_option> enemy_option_tbl = {
 };
 
 Enemy_option Enemy::input() {
+    // Decide on choice based on available options in enemy_option_tbl
+    // For enemies derived from class Enemy, this will be private member
+    // Make different Enemy types based on their enemy_option_tbl
     int roll = rand() % enemy_option_tbl.size();
     Enemy_option choice = enemy_option_tbl[roll];
     // Limit freeze to 2 turns
+    // Enemy choice during turn based on Enemy::status()
     if(status() == Status::freeze && counter() > 0) {
         choice = Enemy_option::none;
     }
@@ -73,18 +55,4 @@ void Enemy::attack(Battle& battle) {
         battle.print(Battle_frame::enemy_attack);
         prompt_next("Enemy miss!",battle);
     }
-}
-
-bool Enemy::in_vicinity(const Player& p, const World_map& world) {
-    string enemy_left = world.look(row(), col() - 1);
-    string enemy_right = world.look(row(), col() + 1);
-    string enemy_up = world.look(row() - 1, col());
-    string enemy_down = world.look(row() + 1, col());
-
-    if (enemy_left == p.sprite()) return true;
-    if (enemy_right == p.sprite()) return true;
-    if (enemy_up == p.sprite()) return true;
-    if (enemy_down == p.sprite()) return true;
-
-    return false;
 }
