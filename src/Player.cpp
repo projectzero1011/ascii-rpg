@@ -32,6 +32,7 @@ void Player::attack(Battle& battle) {
     if (enemy.status() == Status::freeze) hit = true;
     bool crit = (roll == 1) ? true : false;
 
+    // Damage calc
     int dmg = 3 + rand() % 3;
     if (crit) dmg *= 3;
 

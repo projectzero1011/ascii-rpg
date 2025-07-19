@@ -23,4 +23,6 @@ public:
 
     virtual Enemy_option input();
     void attack(Battle&);
+    // void fire_shield(Battle&);
+    // void ice_shield(Battle&);
 };

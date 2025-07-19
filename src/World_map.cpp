@@ -76,7 +76,7 @@ vector<Position> adjacent(const Player& player) {
 }
 
 // Check if Entity is an Enemy by using Entity::sprite()
-vector<reference_wrapper<Enemy>> World_map::adj_enemies(const Player& player) {
+vector<reference_wrapper<Enemy>> World_map::adj_enem(const Player& player) {
     vector<reference_wrapper<Enemy>> adj_enemies;
     vector<Position> adj = adjacent(player);
 

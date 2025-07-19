@@ -15,7 +15,7 @@ public:
     void place(const Entity&);
     void remove(Entity& e) { grid[e.row()][e.col()] = empty_cell; }
     void erase(Entity&);
-    vector<reference_wrapper<Enemy>> adj_enemies(const Player&);
+    vector<reference_wrapper<Enemy>> adj_enem(const Player&);
 private:
     string grid[ROWS][COLS]
     {

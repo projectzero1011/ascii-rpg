@@ -5,10 +5,15 @@
 #include <Battle.h>
 #include <prompt.h>
 
-// WORK HERE 3/1/25 5:47 PM
+// WORK HERE 7/19/25 3:34 PM
 // if status is Power_slash, then choice is attack
 // keep rolling as long as it's invalid choice (not enough mp, etc.)
 // is_valid(choice)
+// Enemy_option Enemy::input(Player& player, Battle& battle); // Enemy.cpp
+
+// WORK HERE 7/19/25 3:34 PM
+// vector<Enemy_option> enemy_option_tbl = { Enemy_option::attack };
+// Enemy.h
 
 vector<Enemy_option> enemy_option_tbl = { 
     Enemy_option::attack 
@@ -56,3 +61,5 @@ void Enemy::attack(Battle& battle) {
         prompt_next("Enemy miss!",battle);
     }
 }
+
+// void Enemy::fire_shield()

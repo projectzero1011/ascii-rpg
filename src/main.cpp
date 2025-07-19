@@ -16,7 +16,7 @@ int main() try {
     system("chcp 65001");
     clear_screen();
     
-    // generate random seed
+    // Generate random seed
     srand(time(nullptr));
     
     Player player {Position{2,2},40,5};
@@ -83,10 +83,9 @@ int main() try {
 
             world.refresh();
 
-            vector<reference_wrapper<Enemy>> enemies;
-            enemies = world.adj_enemies(player);
+            vector<reference_wrapper<Enemy>> enem = world.adj_enem(player);
             
-            for(Enemy& enemy : enemies) {
+            for(Enemy& enemy : enem) {
                 prompt_next("Enemy engaged!",world);
                 Battle battle {player,enemy,fm};
                 battle.engage(world);
@@ -130,32 +129,6 @@ I'll do the following:
 
 1) refine core of battle system (trial & error)
 2) consult design document for more battle system additions
-
-
-
-//
-1) Maybe have last args of Enemy be int level
-2) Maybe reduce size of void Enemy::move(); 
-3) Maybe for Enemy AI, move around block horizontally if can't chase vertically
-4) Maybe operator overloading with << for animations and dialogue
-//
-
-
-// Old comments from before main.cpp split
-
-// add get weakness, set weakness, and private member weakness
-// class Enemy : public Actor; // Enemy.h
-
-
-// WORK HERE 6/27/25 8:41 PM
-// vector<Enemy_option> enemy_option_tbl = { Enemy_option::attack };
-// Enemy.h
-
-
-// WORK HERE 6/27/25 8:40 PM
-// if status is Power_slash, then choice is attack
-// keep rolling as long as it's invalid choice (not enough mp, etc.)
-// is_valid(choice)
-// Enemy_option Enemy::input(Player& player, Battle& battle); // Enemy.cpp
+3) Maybe operator overloading with << for animations and dialogue
 
 */
