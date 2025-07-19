@@ -27,3 +27,5 @@ public:
 private:
     bool parrying {false}, parried {false};
 };
+
+int calc_dmg(int base_dmg, int add_dmg, bool is_crit = false);

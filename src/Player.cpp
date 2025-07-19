@@ -24,20 +24,30 @@ void Player::move(Key input, World_map& world) {
     }
 }
 
+// helper function
+// WORK HERE 7/19/25 5:09 PM
+// Need to calc dmg based on Enemy defense
+int calc_dmg(int base_dmg, int add_dmg, bool is_crit) {
+    int dmg = base_dmg + (rand() % add_dmg+1);
+    if (is_crit) dmg *= 3;
+    return dmg;
+}
+
+constexpr int attack_dmg = 3;
+constexpr int add_dmg = 2;
+
 void Player::attack(Battle& battle) {
     Enemy& enemy = battle.enemy();
 
     int roll = rand() % 10;
     bool hit = (roll == 0) ? false : true;
+    bool is_crit = (roll == 1) ? true : false;
     if (enemy.status() == Status::freeze) hit = true;
-    bool crit = (roll == 1) ? true : false;
 
-    // Damage calc
-    int dmg = 3 + rand() % 3;
-    if (crit) dmg *= 3;
+    int dmg = calc_dmg(attack_dmg, add_dmg, is_crit);
 
     if(hit) {
-        if(crit) {
+        if(is_crit) {
             battle.print(Battle_frame::player_crit);
             prompt_next("Take this!",battle);
             incr_mp(1);
@@ -60,6 +70,8 @@ void Player::parry() {
 }
 
 constexpr int fire_dmg = 8;
+constexpr int fire_percent = 40;
+constexpr int fire_turn_duration = 3;
 
 State Player::fire(Battle& battle) {
     if(mp() < 1) { 
@@ -69,17 +81,9 @@ State Player::fire(Battle& battle) {
     Enemy& enemy = battle.enemy();
     decr_mp(1);
 
-    // Damage calc
-    int dmg = fire_dmg + (rand() % 5);
+    int dmg = calc_dmg(fire_dmg, 5);
     enemy.decr_hp(dmg);
-    
-    // Handle burn chance
-    int roll = rand() % 10;
-    bool is_burn = (roll < 4) ? true : false;
-    if(is_burn && enemy.status() == Status::none) { 
-        enemy.set_status(Status::burn); 
-        enemy.set_counter(3); 
-    }
+    enemy.apply_status(Status::burn, fire_percent, fire_turn_duration);
     
     battle.print(Battle_frame::player_fire);
     prompt_next("Player dealt " + to_string(dmg) + " DMG!", battle);
@@ -87,6 +91,8 @@ State Player::fire(Battle& battle) {
 }
 
 constexpr int ice_dmg = 10;
+constexpr int ice_percent = 40;
+constexpr int ice_turn_duration = 2;
 
 State Player::ice(Battle& battle) {
     if(mp() < 2) { 
@@ -96,17 +102,9 @@ State Player::ice(Battle& battle) {
     Enemy& enemy = battle.enemy();
     decr_mp(2);
 
-    // Damage calc
-    int dmg = ice_dmg + (rand() % 5);
+    int dmg = calc_dmg(ice_dmg, 5);
     enemy.decr_hp(dmg);
-    
-    // Handle freeze chance
-    int roll = rand() % 10;
-    bool is_freeze = (roll < 4) ? true : false;
-    if(is_freeze && enemy.status() == Status::none) {
-        enemy.set_status(Status::freeze);
-        enemy.set_counter(2);
-    }
+    enemy.apply_status(Status::freeze, ice_percent, ice_turn_duration);
 
     battle.print(Battle_frame::player_ice);
     prompt_next("Player dealt " + to_string(dmg) + " DMG!",battle);

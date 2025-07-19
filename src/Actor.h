@@ -8,6 +8,13 @@ enum class Status {
     none
 };
 
+struct Stats {
+    int hp;
+    int mp;
+    int attack;
+    int defense;
+};
+
 class Actor : public Entity {
 public:
     int hp() const { return h; }
@@ -24,6 +31,7 @@ public:
     void set_status(Status s) { st = s; }
     int counter() const { return count; }
     void set_counter(int c) { count = c; }
+    void apply_status(Status st, int percent, int turn_duration);
 protected:
     Actor(Position p, int hp, int mp) 
     : Entity{p}, h{hp}, max_h{hp}, m{mp}, max_m{mp} { }

@@ -25,7 +25,7 @@ public:
     void refresh() { clear_screen(); print(Battle_frame::battle); }
     void print_last() { print(last); }
     void refresh_last() { clear_screen(); print_last(); }
-    void apply_status();
+    void status_tick(Actor& a);
 
     State handle_spell();
     void player_turn();
