@@ -10,7 +10,7 @@ enum class State;
 
 class Player : public Actor {
 public:
-    Player(Position pos, int hp, int mp) : Actor::Actor(pos,hp,mp) { }
+    Player(Position pos, Stats stats) : Actor::Actor(pos,stats) { }
     string sprite() const override { return "@"; }
 
     void move(Key input, World_map& world);
@@ -24,8 +24,7 @@ public:
     bool is_parry() const { return parrying; }
     bool parry_success() const { return parried; }
     void reset_parry() { parrying = false; parried = false; }
+    int calc_dmg(Battle& b, int base, int add, bool is_crit);
 private:
     bool parrying {false}, parried {false};
 };
-
-int calc_dmg(int base_dmg, int add_dmg, bool is_crit = false);

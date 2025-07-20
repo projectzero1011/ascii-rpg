@@ -18,7 +18,7 @@ enum class Enemy_option {
 // add get weakness, set weakness, and private member weakness
 class Enemy : public Actor {
 public:
-    Enemy(Position pos, int hp, int mp) : Actor::Actor(pos,hp,mp) { }
+    Enemy(Position pos, Stats stats) : Actor::Actor(pos,stats) { }
     string sprite() const override { return "%"; }
 
     virtual Enemy_option input();

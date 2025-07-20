@@ -19,8 +19,8 @@ int main() try {
     // Generate random seed
     srand(time(nullptr));
     
-    Player player {Position{2,2},40,5};
-    Enemy enemy {Position{0,0},99,3};
+    Player player {Position{2,2}, Stats{40,5,2}};
+    Enemy enemy {Position{0,0}, Stats{99,3,2}};
 
     World_map world {player,{enemy}};
 

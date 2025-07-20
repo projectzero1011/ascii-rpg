@@ -24,34 +24,31 @@ void Player::move(Key input, World_map& world) {
     }
 }
 
-// helper function
-// WORK HERE 7/19/25 5:09 PM
-// Need to calc dmg based on Enemy defense
-int calc_dmg(int base_dmg, int add_dmg, bool is_crit) {
-    int dmg = base_dmg + (rand() % add_dmg+1);
+int Player::calc_dmg(Battle& b, int base, int add, bool is_crit) {
+    Enemy& enemy = b.enemy();
+    int dmg = base + (rand() % add+1) - enemy.stat().def;
     if (is_crit) dmg *= 3;
     return dmg;
 }
 
-constexpr int attack_dmg = 3;
-constexpr int add_dmg = 2;
+constexpr int base_dmg = 3;
 
 void Player::attack(Battle& battle) {
     Enemy& enemy = battle.enemy();
 
-    int roll = rand() % 10;
-    bool hit = (roll == 0) ? false : true;
-    bool is_crit = (roll == 1) ? true : false;
+    int hit_roll = rand() % 100;
+    bool hit = (hit_roll < 10) ? false : true;
     if (enemy.status() == Status::freeze) hit = true;
 
-    int dmg = calc_dmg(attack_dmg, add_dmg, is_crit);
-
     if(hit) {
-        if(is_crit) {
+        int crit_roll = rand() % 100;
+        bool is_crit = (crit_roll < 10) ? true : false; 
+        if(is_crit) { 
             battle.print(Battle_frame::player_crit);
-            prompt_next("Take this!",battle);
-            incr_mp(1);
+            prompt_next("Take this!", battle); 
+            incr_mp(1); 
         }
+        int dmg = calc_dmg(battle, base_dmg, stats.atk, is_crit);
         enemy.decr_hp(dmg);
         incr_mp(1);
         battle.print(Battle_frame::player_attack);
@@ -65,8 +62,8 @@ void Player::attack(Battle& battle) {
 
 void Player::parry() {
     parrying = true;
-    int roll = rand() % 10;
-    (roll <= 6) ? parried = true : parried = false;
+    int roll = rand() % 100;
+    (roll < 70) ? parried = true : parried = false;
 }
 
 constexpr int fire_dmg = 8;
@@ -81,7 +78,7 @@ State Player::fire(Battle& battle) {
     Enemy& enemy = battle.enemy();
     decr_mp(1);
 
-    int dmg = calc_dmg(fire_dmg, 5);
+    int dmg = calc_dmg(battle, fire_dmg, 5, false);
     enemy.decr_hp(dmg);
     enemy.apply_status(Status::burn, fire_percent, fire_turn_duration);
     
@@ -102,7 +99,7 @@ State Player::ice(Battle& battle) {
     Enemy& enemy = battle.enemy();
     decr_mp(2);
 
-    int dmg = calc_dmg(ice_dmg, 5);
+    int dmg = calc_dmg(battle, ice_dmg, 5, false);
     enemy.decr_hp(dmg);
     enemy.apply_status(Status::freeze, ice_percent, ice_turn_duration);
 

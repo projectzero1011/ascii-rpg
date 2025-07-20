@@ -33,6 +33,8 @@ Enemy_option Enemy::input() {
     return choice;
 }
 
+// WORK HERE 7/20/25 7:17 PM
+// Modify to use calc_dmg()
 void Enemy::attack(Battle& battle) {
     Player& player = battle.player();
     int roll = rand() % 10;
