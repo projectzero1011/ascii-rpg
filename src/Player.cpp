@@ -24,21 +24,23 @@ void Player::move(Key input, World_map& world) {
     }
 }
 
-constexpr int base_dmg = 3;
+constexpr int player_base_dmg = 3;
+constexpr int player_hit_percent = 90;
+constexpr int player_crit_percent = 10;
 
 void Player::attack(Battle& battle) {
     Enemy& enemy = battle.enemy();
-    bool hit = (rand() % 100) < 90;
+    bool hit = (rand() % 100) < player_hit_percent;
     if (enemy.status() == Status::freeze) hit = true;
 
     if(hit) {
-        bool is_crit = (rand() % 100) < 10;
+        bool is_crit = (rand() % 100) < player_crit_percent;
         if(is_crit) { 
             battle.print(Battle_frame::player_crit);
             prompt_next("Take this!", battle); 
             incr_mp(1); 
         }
-        int dmg = calc_dmg(enemy, base_dmg, stats.atk, is_crit);
+        int dmg = calc_dmg(enemy, player_base_dmg, stats.atk, is_crit);
         enemy.decr_hp(dmg);
         incr_mp(1);
         battle.print(Battle_frame::player_attack);

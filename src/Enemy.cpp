@@ -1,4 +1,3 @@
-#include <constants.h>
 #include <Enemy.h>
 #include <Player.h>
 #include <World_map.h>
@@ -29,13 +28,15 @@ Enemy_option Enemy::input() {
     return choice;
 }
 
-constexpr int base_dmg = 3;
+constexpr int enemy_base_dmg = 3;
+constexpr int enemy_hit_percent = 90;
+constexpr int enemy_crit_percent = 10;
 
 void Enemy::attack(Battle& battle) {
     Player& player = battle.player();
-    bool hit = (rand() % 100) < 90;
-    bool is_crit = (rand() % 100) < 10;
-    int dmg = calc_dmg(player, base_dmg, stats.atk, is_crit);
+    bool hit = (rand() % 100) < enemy_hit_percent;
+    bool is_crit = (rand() % 100) < enemy_crit_percent;
+    int dmg = calc_dmg(player, enemy_base_dmg, stats.atk, is_crit);
 
     battle.print(Battle_frame::enemy_attack);
     if (!hit) { prompt_next("Enemy miss!", battle); return; }
