@@ -35,9 +35,9 @@ public:
     int counter() const { return count; }
     void set_counter(int c) { count = c; }
     void apply_status(Status st, int percent, int turn_duration);
+    int calc_dmg(Actor& a, int base, int add, bool is_crit);
 protected:
-    Actor(Position p, Stats s) 
-    : Entity{p}, stats{s}, h{s.hp}, m{s.mp} { }
+    Actor(Position p, Stats s) : Entity{p}, stats{s}, h{s.hp}, m{s.mp} { }
     Stats stats;
 private:
     int h, m;

@@ -24,7 +24,6 @@ public:
     bool is_parry() const { return parrying; }
     bool parry_success() const { return parried; }
     void reset_parry() { parrying = false; parried = false; }
-    int calc_dmg(Battle& b, int base, int add, bool is_crit);
 private:
     bool parrying {false}, parried {false};
 };

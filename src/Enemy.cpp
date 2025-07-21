@@ -11,10 +11,6 @@
 // is_valid(choice)
 // Enemy_option Enemy::input(Player& player, Battle& battle); // Enemy.cpp
 
-// WORK HERE 7/19/25 3:34 PM
-// vector<Enemy_option> enemy_option_tbl = { Enemy_option::attack };
-// Enemy.h
-
 vector<Enemy_option> enemy_option_tbl = { 
     Enemy_option::attack 
 };
@@ -33,34 +29,31 @@ Enemy_option Enemy::input() {
     return choice;
 }
 
-// WORK HERE 7/20/25 7:17 PM
-// Modify to use calc_dmg()
+constexpr int base_dmg = 3;
+
 void Enemy::attack(Battle& battle) {
     Player& player = battle.player();
-    int roll = rand() % 10;
-    bool hit = (roll == 0) ? false : true;
-    int dmg = 3 + (rand() % 3);
+    bool hit = (rand() % 100) < 90;
+    bool is_crit = (rand() % 100) < 10;
+    int dmg = calc_dmg(player, base_dmg, stats.atk, is_crit);
 
-    if(hit) {
+    battle.print(Battle_frame::enemy_attack);
+    if (!hit) { prompt_next("Enemy miss!", battle); return; }
+
+    if(player.is_parry()) {
         if(player.parry_success()) {
             player.incr_mp(1);
             battle.print(Battle_frame::player_parry);
-            prompt_next("Parry successful!",battle);
-        }
-        else if(!player.parry_success() && player.is_parry()) {
-            player.decr_hp(dmg);
-            battle.print(Battle_frame::enemy_attack);
-            prompt_next("Parry fail!",battle);
+            prompt_next("Parry successful!", battle);
         }
         else {
             player.decr_hp(dmg);
-            battle.print(Battle_frame::enemy_attack);
-            prompt_next("Enemy dealt " + to_string(dmg) + " DMG!",battle);
+            prompt_next("Parry fail!", battle);
         }
     }
     else {
-        battle.print(Battle_frame::enemy_attack);
-        prompt_next("Enemy miss!",battle);
+        player.decr_hp(dmg);
+        prompt_next("Enemy dealt " + to_string(dmg) + " DMG!", battle);
     }
 }
 

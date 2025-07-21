@@ -24,31 +24,21 @@ void Player::move(Key input, World_map& world) {
     }
 }
 
-int Player::calc_dmg(Battle& b, int base, int add, bool is_crit) {
-    Enemy& enemy = b.enemy();
-    int dmg = base + (rand() % add+1) - enemy.stat().def;
-    if (is_crit) dmg *= 3;
-    return dmg;
-}
-
 constexpr int base_dmg = 3;
 
 void Player::attack(Battle& battle) {
     Enemy& enemy = battle.enemy();
-
-    int hit_roll = rand() % 100;
-    bool hit = (hit_roll < 10) ? false : true;
+    bool hit = (rand() % 100) < 90;
     if (enemy.status() == Status::freeze) hit = true;
 
     if(hit) {
-        int crit_roll = rand() % 100;
-        bool is_crit = (crit_roll < 10) ? true : false; 
+        bool is_crit = (rand() % 100) < 10;
         if(is_crit) { 
             battle.print(Battle_frame::player_crit);
             prompt_next("Take this!", battle); 
             incr_mp(1); 
         }
-        int dmg = calc_dmg(battle, base_dmg, stats.atk, is_crit);
+        int dmg = calc_dmg(enemy, base_dmg, stats.atk, is_crit);
         enemy.decr_hp(dmg);
         incr_mp(1);
         battle.print(Battle_frame::player_attack);
@@ -78,7 +68,7 @@ State Player::fire(Battle& battle) {
     Enemy& enemy = battle.enemy();
     decr_mp(1);
 
-    int dmg = calc_dmg(battle, fire_dmg, 5, false);
+    int dmg = calc_dmg(enemy, fire_dmg, 5, false);
     enemy.decr_hp(dmg);
     enemy.apply_status(Status::burn, fire_percent, fire_turn_duration);
     
@@ -99,7 +89,7 @@ State Player::ice(Battle& battle) {
     Enemy& enemy = battle.enemy();
     decr_mp(2);
 
-    int dmg = calc_dmg(battle, ice_dmg, 5, false);
+    int dmg = calc_dmg(enemy, ice_dmg, 5, false);
     enemy.decr_hp(dmg);
     enemy.apply_status(Status::freeze, ice_percent, ice_turn_duration);
 
