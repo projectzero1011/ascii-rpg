@@ -8,6 +8,7 @@ add_executable(
     aegis
     src/Position.cpp
     src/Option.cpp
+    src/Actor.cpp
     src/Player.cpp
     src/Enemy.cpp
     src/Frame_manager.cpp
