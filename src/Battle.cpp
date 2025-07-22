@@ -4,13 +4,21 @@
 #include <input.h>
 #include <World_map.h>
 
+const vector<string> enemy_status_tbl = {
+    "Burn",
+    "Freeze",
+    "None"
+};
+
 void Battle::print(Battle_frame bf) {
     last = bf;
     clear_screen();
+    const string e_st = enemy_status_tbl[int(e.status())];
     cout << "Player" << "\t\t" << setw(8) << "Enemy" << "\n"
          << "HP " << setw(2) << p.hp() << "/" << p.max_hp() << "\t" 
          << "HP " << setw(2) << e.hp() << "/" << e.max_hp() << "\n" 
-         << "MP  " << p.mp() << "/ " << p.max_mp() << "\t" << "\n\n";
+         << "MP  " << p.mp() << "/ " << p.max_mp() << "\t" << "ST " << e_st 
+         << "\n\n";
     fm.print(bf);
 }
 
@@ -18,18 +26,24 @@ constexpr int burn = 3;
 
 void Battle::status_tick(Actor& a) {
     if(a.counter() > 0) {
+        a.set_counter(a.counter()-1);
         switch(a.status()) {
             case Status::burn:
                 a.decr_hp(burn);
-                a.set_counter(a.counter()-1);
                 print(Battle_frame::enemy_burn);
                 prompt_next("Burn dealt " + to_string(burn) + " DMG", *this);
                 break;
             case Status::freeze:
-                a.set_counter(a.counter()-1);
                 print(Battle_frame::enemy_freeze);
                 prompt_next("The Enemy is Frozen!");
                 break;
+            /*
+            case Status::fire_shield:
+                a.stats.def += 5;
+                print(Battle_frame::enemy_shield);
+                prompt_next("Enemy puts up Fire Shield!");
+                break;
+            */
             default: 
                 throw runtime_error("Invalid Status!"); 
                 break;
@@ -37,6 +51,7 @@ void Battle::status_tick(Actor& a) {
     }
     else {
         a.set_status(Status::none);
+        a.reset_stats();
     }
 }
 
