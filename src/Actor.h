@@ -5,6 +5,9 @@
 enum class Status {
     burn,
     freeze,
+    fire_shield,
+    // ice_shield,
+    stun,
     none
 };
 
@@ -19,6 +22,8 @@ struct Stats {
 
 class Actor : public Entity {
 public:
+    Stats stats;
+    void reset_stats() { stats = default_stats; }
     int hp() const { return h; }
     int max_hp() const { return stats.hp; }
     void decr_hp(int dmg) { h -= dmg; if (h < 0) h = 0; }
@@ -29,7 +34,6 @@ public:
     void decr_mp(int amt) { m -= amt; if (m < 0) m = 0; }
     void incr_mp(int amt) { m += amt; if (m > stats.mp) m = stats.mp; }
 
-    Stats stat() const { return stats; }
     Status status() const { return st; }
     void set_status(Status s) { st = s; }
     int counter() const { return count; }
@@ -37,10 +41,11 @@ public:
     void apply_status(Status st, int percent, int turn_duration);
     int calc_dmg(Actor& a, int base, int add, bool is_crit);
 protected:
-    Actor(Position p, Stats s) : Entity{p}, stats{s}, h{s.hp}, m{s.mp} { }
-    Stats stats;
+    Actor(Position p, Stats s) 
+    : Entity{p}, stats{s}, default_stats{s}, h{s.hp}, m{s.mp} { }
 private:
     int h, m;
+    Stats default_stats;
     Status st {Status::none};
     int count {0};
 };

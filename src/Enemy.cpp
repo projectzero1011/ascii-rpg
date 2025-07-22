@@ -11,8 +11,16 @@
 // Enemy_option Enemy::input(Player& player, Battle& battle); // Enemy.cpp
 
 vector<Enemy_option> enemy_option_tbl = { 
-    Enemy_option::attack 
+    Enemy_option::attack,
+    Enemy_option::fire_shield,
 };
+
+bool is_buff(Enemy_option op) {
+    switch(op) {
+        case Enemy_option::fire_shield: return true;  
+    }
+    return false;
+}
 
 Enemy_option Enemy::input() {
     // Decide on choice based on available options in enemy_option_tbl
@@ -20,11 +28,15 @@ Enemy_option Enemy::input() {
     // Make different Enemy types based on their enemy_option_tbl
     int roll = rand() % enemy_option_tbl.size();
     Enemy_option choice = enemy_option_tbl[roll];
+    // Don't buff while another buff is active
+    while(is_buff(choice) && status() != Status::none) { 
+        roll = rand() % enemy_option_tbl.size();
+        choice = enemy_option_tbl[roll];
+    }
     // Limit freeze to 2 turns
     // Enemy choice during turn based on Enemy::status()
-    if(status() == Status::freeze && counter() > 0) {
-        choice = Enemy_option::none;
-    }
+    const bool is_frozen = status() == Status::freeze && counter() > 0;
+    if (is_frozen || status() == Status::stun) choice = Enemy_option::none;
     return choice;
 }
 
@@ -58,4 +70,9 @@ void Enemy::attack(Battle& battle) {
     }
 }
 
-// void Enemy::fire_shield()
+void Enemy::fire_shield(Battle& battle) {
+    stats.def += 5;
+    apply_status(Status::fire_shield, 100, 3);
+    battle.print(Battle_frame::enemy_fire_shield);
+    prompt_next("Enemy Fire Shield!");
+}

@@ -12,6 +12,7 @@ enum class Enemy_option {
     attack,
     // fire
     // ice
+    fire_shield,
     none
 };
 
@@ -23,6 +24,8 @@ public:
 
     virtual Enemy_option input();
     void attack(Battle&);
-    // void fire_shield(Battle&);
+    void fire_shield(Battle&);
     // void ice_shield(Battle&);
 };
+
+bool is_buff(Enemy_option op);

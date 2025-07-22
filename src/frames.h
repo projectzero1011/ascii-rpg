@@ -26,7 +26,8 @@ enum class Battle_frame {
     player_ice,
     enemy_attack,
     enemy_burn,
-    enemy_freeze
+    enemy_freeze,
+    enemy_fire_shield
 };
 
 const vector<string> battle_frame_tbl = { 
@@ -39,5 +40,6 @@ const vector<string> battle_frame_tbl = {
     "player_ice", 
     "enemy_attack", 
     "enemy_burn",
-    "enemy_freeze"
+    "enemy_freeze",
+    "enemy_fire_shield"
 };
