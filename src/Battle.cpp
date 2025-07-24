@@ -94,6 +94,7 @@ State Battle::handle_spell() {
 }
 
 void Battle::player_turn() {
+    p.reset_parry();
     State state = State::option;
     while(state == State::option) {
         Option choice = battle_input("What will you do? [h: help]");
@@ -166,8 +167,6 @@ void Battle::engage(const World_map& world) {
     refresh();
 
     while(true) {
-        p.reset_parry();
-
         player_turn();
         if(e.hp() == 0) {
             world.refresh();
