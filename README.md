@@ -2,7 +2,7 @@
 
 ### Requirements
 
-- CMake ≥ 3.10
+- CMake >= 3.10
 - C++ Compiler (e.g., GCC, Clang, or MSVC)
 
 ### Steps
