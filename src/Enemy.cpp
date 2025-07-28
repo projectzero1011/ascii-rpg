@@ -13,7 +13,7 @@
 vector<Enemy_option> enemy_option_tbl = { 
     Enemy_option::attack,
     Enemy_option::fire_shield,
-    Enemy_option::ice_shield
+    // Enemy_option::ice_shield
 };
 
 bool is_buff(Enemy_option op) {
