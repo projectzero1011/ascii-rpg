@@ -8,7 +8,7 @@ const vector<string> enemy_status_tbl = {
     "Burn",
     "Freeze",
     "Fire Shield",
-    // "Ice Shield"
+    "Ice Shield",
     "Stun",
     "None"
 };
@@ -42,8 +42,9 @@ void Battle::status_tick(Actor& a) {
                 break;
             case Status::fire_shield:
                 break;
+            case Status::ice_shield:
+                break;
             case Status::stun:
-                // 
                 break;
             default: 
                 throw runtime_error("Invalid Status!"); 
@@ -154,6 +155,9 @@ void Battle::enemy_turn() {
         */
         case Enemy_option::fire_shield:
             e.fire_shield(*this);
+            break;
+        case Enemy_option::ice_shield:
+            e.ice_shield(*this);
             break;
         case Enemy_option::none:
             break;

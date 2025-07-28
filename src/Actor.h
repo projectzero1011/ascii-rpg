@@ -6,7 +6,7 @@ enum class Status {
     burn,
     freeze,
     fire_shield,
-    // ice_shield,
+    ice_shield,
     stun,
     none
 };

@@ -13,30 +13,35 @@
 vector<Enemy_option> enemy_option_tbl = { 
     Enemy_option::attack,
     Enemy_option::fire_shield,
+    Enemy_option::ice_shield
 };
 
 bool is_buff(Enemy_option op) {
     switch(op) {
-        case Enemy_option::fire_shield: return true;  
+        case Enemy_option::fire_shield: return true;
+        case Enemy_option::ice_shield: return true;
+        case Enemy_option::attack: return false;
+        default: throw runtime_error("Invalid Enemy_option!");
     }
     return false;
 }
 
+// Decide on choice based on available options in enemy_option_tbl
+// For enemies derived from class Enemy, this will be private member
+// Make different Enemy types based on their enemy_option_tbl
 Enemy_option Enemy::input() {
-    // Decide on choice based on available options in enemy_option_tbl
-    // For enemies derived from class Enemy, this will be private member
-    // Make different Enemy types based on their enemy_option_tbl
     int roll = rand() % enemy_option_tbl.size();
     Enemy_option choice = enemy_option_tbl[roll];
+
     // Don't buff while another buff is active
     while(is_buff(choice) && status() != Status::none) { 
         roll = rand() % enemy_option_tbl.size();
         choice = enemy_option_tbl[roll];
     }
-    // Limit freeze to 2 turns
-    // Enemy choice during turn based on Enemy::status()
+
     const bool is_frozen = status() == Status::freeze && counter() > 0;
     if (is_frozen || status() == Status::stun) choice = Enemy_option::none;
+    
     return choice;
 }
 
@@ -75,4 +80,11 @@ void Enemy::fire_shield(Battle& battle) {
     apply_status(Status::fire_shield, 100, 3);
     battle.print(Battle_frame::enemy_fire_shield);
     prompt_next("Enemy Fire Shield!");
+}
+
+void Enemy::ice_shield(Battle& battle) {
+    stats.def += 5;
+    apply_status(Status::ice_shield, 100, 3);
+    battle.print(Battle_frame::enemy_ice_shield);
+    prompt_next("Enemy Ice Shield!");
 }
