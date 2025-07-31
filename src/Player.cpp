@@ -71,7 +71,7 @@ State Player::fire(Battle& battle) {
     decr_mp(1);
 
     int dmg = calc_dmg(enemy, fire_dmg, 5, false);
-    // if(enemy.status() == Status::fire_shield)
+    if(enemy.status() == Status::fire_shield) dmg = 0;
     if(enemy.status() == Status::ice_shield) {
         enemy.reset_stats();
         enemy.set_status(Status::none);
@@ -99,7 +99,7 @@ State Player::ice(Battle& battle) {
     decr_mp(2);
 
     int dmg = calc_dmg(enemy, ice_dmg, 5, false);
-    // if(enemy.status() == Status::ice_shield)
+    if(enemy.status() == Status::ice_shield) dmg = 0;
     if(enemy.status() == Status::fire_shield) {
         enemy.reset_stats();
         enemy.set_status(Status::none);
