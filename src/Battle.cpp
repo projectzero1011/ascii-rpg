@@ -139,7 +139,7 @@ void Battle::player_turn() {
 
 void Battle::enemy_turn() {
     if (e.status() == Status::stun) return;
-    if (e.status() == Status::freeze && e.counter() > 0) return;
+    if (e.status() == Status::freeze) return;
 
     Enemy_option enemy_choice = e.input();
 
