@@ -13,8 +13,7 @@ enum class Enemy_option {
     // fire
     // ice
     fire_shield,
-    ice_shield,
-    none
+    ice_shield
 };
 
 // add get weakness, set weakness, and private member weakness

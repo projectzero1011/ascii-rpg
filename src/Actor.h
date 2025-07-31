@@ -8,6 +8,7 @@ enum class Status {
     fire_shield,
     ice_shield,
     stun,
+    focus,
     none
 };
 

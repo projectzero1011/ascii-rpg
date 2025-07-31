@@ -130,3 +130,13 @@ State Player::heal(Battle& battle) {
     prompt_next("Player healed " + to_string(amt) + " HP!",battle);
     return State::action;
 }
+
+State Player::focus(Battle& battle) {
+    battle.print(Battle_frame::player_crit);
+    prompt_next("Focus my energy...",battle);
+    decr_hp(hp()/2);
+    set_status(Status::focus);
+    battle.refresh();
+    prompt_next("-50% HP & Spell DMG Up!",battle);
+    return State::action;
+}

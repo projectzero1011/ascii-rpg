@@ -42,7 +42,7 @@ Spell spell_input(string message) {
         case '7': return Spell::fire;
         case '8': return Spell::ice;
         case '9': return Spell::heal;
-        // case '0': return Spell::aegis;
+        case '0': return Spell::focus;
         case 'x': return Spell::back;
         default:  return Spell::invalid;
     }

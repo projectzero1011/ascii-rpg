@@ -38,9 +38,6 @@ Enemy_option Enemy::input() {
         roll = rand() % enemy_option_tbl.size();
         choice = enemy_option_tbl[roll];
     }
-
-    const bool is_frozen = status() == Status::freeze && counter() > 0;
-    if (is_frozen || status() == Status::stun) choice = Enemy_option::none;
     
     return choice;
 }
@@ -71,7 +68,14 @@ void Enemy::attack(Battle& battle) {
     }
     else {
         player.decr_hp(dmg);
-        prompt_next("Enemy dealt " + to_string(dmg) + " DMG!", battle);
+        if(player.status() == Status::focus) {
+            player.set_status(Status::none);
+            player.apply_status(Status::stun,100,2);
+            prompt_next("Enemy stunned you!", battle);
+        }
+        else {
+            prompt_next("Enemy dealt " + to_string(dmg) + " DMG!", battle);
+        }
     }
 }
 

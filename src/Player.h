@@ -18,8 +18,8 @@ public:
     void parry();
     State fire(Battle&);
     State ice(Battle&);
-    // cast aegis
     State heal(Battle&);
+    State focus(Battle&);
 
     bool is_parry() const { return parrying; }
     bool parry_success() const { return parried; }

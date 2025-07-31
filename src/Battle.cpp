@@ -4,19 +4,20 @@
 #include <input.h>
 #include <World_map.h>
 
-const vector<string> enemy_status_tbl = {
+const vector<string> status_tbl = {
     "Burn",
     "Freeze",
     "Fire Shield",
     "Ice Shield",
     "Stun",
+    "Focus",
     "None"
 };
 
 void Battle::print(Battle_frame bf) {
     last = bf;
     clear_screen();
-    const string e_st = enemy_status_tbl[int(e.status())];
+    const string e_st = status_tbl[int(e.status())];
     cout << "Player" << "\t\t" << setw(8) << "Enemy" << "\n"
          << "HP " << setw(2) << p.hp() << "/" << p.max_hp() << "\t" 
          << "HP " << setw(2) << e.hp() << "/" << e.max_hp() << "\n" 
@@ -46,13 +47,15 @@ void Battle::status_tick(Actor& a) {
                 break;
             case Status::stun:
                 break;
+            case Status::focus:
+                break;
             default: 
                 throw runtime_error("Invalid Status!"); 
                 break;
         }
     }
     else {
-        a.set_status(Status::none);
+        if (a.status() != Status::focus) a.set_status(Status::none);
         a.reset_stats();
     }
 }
@@ -73,12 +76,9 @@ State Battle::handle_spell() {
             case Spell::heal:
                 state = p.heal(*this);
                 break;
-            /*
-            case Spell::aegis:
-                state = State::action;
-                player.aegis();
+            case Spell::focus:
+                state = p.focus(*this);
                 break;
-            */
             case Spell::back:
                 state = State::option;
                 refresh();
@@ -95,6 +95,8 @@ State Battle::handle_spell() {
 }
 
 void Battle::player_turn() {
+    if (p.status() == Status::stun) return;
+
     p.reset_parry();
     State state = State::option;
     while(state == State::option) {
@@ -136,6 +138,9 @@ void Battle::player_turn() {
 }
 
 void Battle::enemy_turn() {
+    if (e.status() == Status::stun) return;
+    if (e.status() == Status::freeze && e.counter() > 0) return;
+
     Enemy_option enemy_choice = e.input();
 
     switch(enemy_choice) {
@@ -149,8 +154,8 @@ void Battle::enemy_turn() {
         case Enemy_option::ice:
             e.ice(player,battle);
             break;
-        case Enemy_option::attack_up:
-            e.attack_up(battle);
+        case Enemy_option::focus:
+            e.focus(battle);
             break;
         */
         case Enemy_option::fire_shield:
@@ -158,8 +163,6 @@ void Battle::enemy_turn() {
             break;
         case Enemy_option::ice_shield:
             e.ice_shield(*this);
-            break;
-        case Enemy_option::none:
             break;
         default:
             throw runtime_error("Enemy_option doesn't exist!");
