@@ -52,10 +52,7 @@ int main() try {
             fm.print(Frame::title);
         }
 
-
         /* Main Game Loop */
-
-        world.refresh();
 
         while(true) {
             Key input = Key::invalid;
