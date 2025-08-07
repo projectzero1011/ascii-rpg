@@ -80,14 +80,14 @@ int main() try {
 
             world.refresh();
 
-            vector<reference_wrapper<Enemy>> enem = world.adj_enem(player);
+            vector<Enemy*> enemies = world.adj_enemies(player);
             
-            for(Enemy& enemy : enem) {
+            for(Enemy* enemy : enemies) {
                 prompt_next("Enemy engaged!",world);
-                Battle battle {player,enemy,fm};
+                Battle battle {player,*enemy,fm};
                 battle.engage(world);
                 if (player.hp() == 0) break;
-                world.erase(enemy);
+                world.erase(*enemy);
             }
 
             if (player.hp() == 0) break;
